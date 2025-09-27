@@ -115,4 +115,6 @@ if __name__ == "__main__":
 
     # save bathrooms to a json file
 
-    FILE_NAME = "BATHROOM_INFORMATION"
+    FILE_NAME = "BATHROOM_INFORMATION.json"
+    with open(FILE_NAME, "w") as f:
+        json.dump(bathrooms, f, indent=4)
