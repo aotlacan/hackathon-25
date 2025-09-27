@@ -1,9 +1,9 @@
 PRAGMA foreign_keys = ON;
 
 INSERT INTO building(id, building_name, building_address, building_record_number, num_bathrooms)
-VALUES ('0', 'BEYSTER BOB AND BETTY BUILDING', 'temp', '1005092', 13)
+VALUES ('0', 'BEYSTER BOB AND BETTY BUILDING', 'temp', '1005092', 13);
 
-INSERT INTO rooms(room_id, floor, room_number, building_record_number)
+INSERT INTO rooms(room_id, floor, room_number, building_record_number) VALUES
 ('0', '04', '4823W', '2115868'),
 ('1', '04', '4823', '2115867'),
 ('2', '04', '4821M', '2115866'),
