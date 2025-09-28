@@ -19,7 +19,13 @@ CREATE TABLE reviews (
 CREATE TABLE building (
   id TEXT PRIMARY KEY,
   building_name TEXT NOT NULL,
-  building_address TEXT NOT NULL,
+  building_address_number TEXT NOT NULL,
+  building_street TEXT NOT NULL,
+  building_city TEXT NOT NULL,
+  building_state TEXT NOT NULL,
+  building_zip TEXT NOT NULL,
+  building_lat TEXT NOT NULL,
+  building_long TEXT NOT NULL,
   building_record_number TEXT NOT NULL,
   num_bathrooms INTEGER NOT NULL
 );
