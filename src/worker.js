@@ -33,6 +33,7 @@ Flushfinder API
 GET  /rooms?brn=&lt;BUILDING_RECORD_NUMBER&gt;
 GET  /rooms/:id/summary
 GET  /reviews/:roomId
+GET  /building
 POST /reviews  body: { room_id, user_id, stars }
 
 Try:
@@ -111,6 +112,41 @@ Try:
         }
       }
     }
+
+    // ---- GET /buildings ----
+    if (request.method === "GET" && pathname === "/building") {
+      try {
+        const { results } = await env.flushfinder
+          .prepare(
+            `SELECT id, building_name, building_address_number, building_street, building_lat, building_long
+            FROM building
+            ORDER BY id DESC`
+          )
+          .all();
+
+        return new Response(JSON.stringify({ buildings: results }), {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*", // <--- crucial
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+          },
+        });
+      } catch (e) {
+        return new Response(
+          JSON.stringify({ error: "DB error", detail: String(e) }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET, OPTIONS",
+            },
+          }
+        );
+      }
+    }
+
 
     // ---- POST /reviews ----
     if (request.method === "POST" && pathname === "/reviews") {
