@@ -47,6 +47,7 @@ Try:
     // ---- GET /rooms?brn=1005092 ----
     if (request.method === "GET" && pathname === "/rooms") {
       const brn = searchParams.get("brn");
+      if(brn === 0) return({json : {"room_id":0,"room_number":0,"floor":0}});
       if (!brn) return json({ error: "Missing brn" }, 400);
 
       try {
@@ -118,7 +119,7 @@ Try:
       try {
         const { results } = await env.flushfinder
           .prepare(
-            `SELECT id, building_name, building_address_number, building_street, building_lat, building_long, num_bathrooms
+            `SELECT id, building_name, building_address_number, building_street, building_lat, building_long, num_bathrooms, building_record_number
             FROM building
             ORDER BY id DESC`
           )

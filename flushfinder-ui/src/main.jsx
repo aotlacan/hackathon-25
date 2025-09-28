@@ -8,7 +8,6 @@ import Header from './header.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header />
-    <MyMap />
     <App />
   </StrictMode>,
 )

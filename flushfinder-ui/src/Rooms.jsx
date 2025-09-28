@@ -3,18 +3,21 @@ import React, { useEffect, useState } from "react";
 import RoomReviews from "./RoomReviews";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8787";
-const DEFAULT_BRN = import.meta.env.VITE_DEFAULT_BRN || "1005092";
 
-export default function Rooms() {
+export default function Rooms({ brn }) {
   const [rooms, setRooms] = useState([]);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
+
+  if(!brn || brn === "") {
+    return <p>Please select a building to see rooms.</p>;
+  }
 
   useEffect(() => {
     (async () => {
       setStatus("loading");
       try {
-        const res = await fetch(`${API_BASE}/rooms?brn=${encodeURIComponent(DEFAULT_BRN)}`);
+        const res = await fetch(`${API_BASE}/rooms?brn=${encodeURIComponent(brn)}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setRooms(Array.isArray(data.rooms) ? data.rooms : []);
@@ -24,11 +27,11 @@ export default function Rooms() {
         setStatus("error");
       }
     })();
-  }, []);
+  }, [brn]);
 
   return (
     <section>
-      <h2>Building {DEFAULT_BRN}</h2>
+      <h2>Building {brn}</h2>
 
       {status === "loading" && <p>Loading rooms…</p>}
 
