@@ -118,7 +118,7 @@ Try:
       try {
         const { results } = await env.flushfinder
           .prepare(
-            `SELECT id, building_name, building_address_number, building_street, building_lat, building_long
+            `SELECT id, building_name, building_address_number, building_street, building_lat, building_long, num_bathrooms
             FROM building
             ORDER BY id DESC`
           )
