@@ -1,96 +1,90 @@
-/* Global styles and theming */
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-html, body, #root {
-  height: 100%;
+/* Remove default browser padding/margins */
+html, body {
   margin: 0;
   padding: 0;
-  overflow: auto; /* prevent page scroll, scroll inside container */
+  border: none;
+  background-color: #242424; /* Match your theme */
 }
 
+
+/* Root should stack header on top, content below */
 #root {
   display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #242424; /* overall background (dark mode base) */
+}
+
+/* Page frame: header on top, content fills rest */
+#layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: inherit;
+}
+
+/* Two columns: map (left) and sidebar (right) */
+#content {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background-color: #1a1a1a; /* main content background */
+}
+
+/* Left: map area */
+#map-section {
+  flex: 2 1 0;
+  min-width: 0;
+  position: relative;
+  background-color: #000; /* fallback background behind map */
+}
+
+/* Ensure map fills its section */
+#map-section > * {
   height: 100%;
+  width: 100%;
 }
 
-/* Map container: top portion of screen */
-.map-container {
-  width: 100%;
-  height: 100%; /* 70% of viewport height */
-}
-
-/* Scrollable content below map */
-.app-container {
-  flex: 1;           /* fill remaining space */
-  width: 100%;
-  overflow-y: auto;  /* vertical scroll if content exceeds container */
-  background-color: #1a1a1a;
+/* Right: sidebar panel */
+#sidebar {
+  flex: 0 0 280px;
+  max-width: 320px;
+  min-width: 220px;
+  overflow-y: auto;
+  border-left: 1px solid #e5e5e5;
+  background-color: #f9f9f9; /* light sidebar */
+  color: #111;
   padding: 1rem;
 }
 
-/* Links and buttons */
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover { color: #535bf2; }
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover { border-color: #646cff; }
-button:focus, button:focus-visible { outline: 4px auto -webkit-focus-ring-color; }
-
-/* Example header */
-#MBathroomHeader {
-  text-align: center;
-}
-
+/* Header bar */
 #MBathroomHeader {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  padding: 10px 12px;
+  background-color: #00274c; /* UMich blue header */
+  color: #ffcb05; /* UMich maize text */
 }
 
-/* Light mode overrides */
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  #root {
+    background-color: #121212;
   }
-  a:hover { color: #747bff; }
-  button { background-color: #f9f9f9; }
-  .app-container { background-color: #f0f0f0; }
-}
 
-/* Example scrollable list items */
-.item {
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  background: #333;
-  border-radius: 4px;
-}
-@media (prefers-color-scheme: light) {
-  .item { background: #e0e0e0; }
+  #content {
+    background-color: #1a1a1a;
+  }
+
+  #sidebar {
+    background-color: #101418;
+    color: #e9eef2;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
 }
