@@ -69,13 +69,18 @@ def get_building_info(access_token):
                 addy = building["BuildingStreetNumber"] + ", " + building["BuildingStreetName"] + ", " + building["BuildingCity"] + ", " + building["BuildingState"]
                 # print(addy)
                 location = geolocator.geocode(addy)
+
+                rooms = get_room_info(token, building["BuildingRecordNumber"])
+                bathrooms = filter_bathrooms(rooms)
+                num_rooms = len(bathrooms)
+
                 if location is None:
-                    f.write(f"({i}, {building["BuildingLongDescription"]}, {building["BuildingStreetNumber"]}, {building["BuildingStreetName"]}, {building["BuildingCity"]}, {building["BuildingState"]}, {building["BuildingPostal"]}, {0.0000}, {0.0000}, {building["BuildingRecordNumber"]}, 0)")
+                    f.write(f"(\"{i}\", \"{building["BuildingLongDescription"]}\", \"{building["BuildingStreetNumber"]}\", \"{building["BuildingStreetName"]}\", \"{building["BuildingCity"]}\", \"{building["BuildingState"]}\", \"{building["BuildingPostal"]}\", \"{0.0000}\", \"{0.0000}\", \"{building["BuildingRecordNumber"]}\", {num_rooms})\n")
                 else:
-                    f.write(f"({i}, {building["BuildingLongDescription"]}, {building["BuildingStreetNumber"]}, {building["BuildingStreetName"]}, {building["BuildingCity"]}, {building["BuildingState"]}, {building["BuildingPostal"]}, {location.latitude}, {location.longitude}, {building["BuildingRecordNumber"]}, 0)")
+                    f.write(f"(\"{i}\", \"{building["BuildingLongDescription"]}\", \"{building["BuildingStreetNumber"]}\", \"{building["BuildingStreetName"]}\", \"{building["BuildingCity"]}\", \"{building["BuildingState"]}\", \"{building["BuildingPostal"]}\", \"{location.latitude}\", \"{location.longitude}\", \"{building["BuildingRecordNumber"]}\", {num_rooms})\n")
                 i += 1
             except GeocoderUnavailable:
-                f.write(f"({i}, {building["BuildingLongDescription"]}, {building["BuildingStreetNumber"]}, {building["BuildingStreetName"]}, {building["BuildingCity"]}, {building["BuildingState"]}, {building["BuildingPostal"]}, {0.0000}, {0.0000}, {building["BuildingRecordNumber"]}, 0)")
+                f.write(f"(\"{i}\", \"{building["BuildingLongDescription"]}\", \"{building["BuildingStreetNumber"]}\", \"{building["BuildingStreetName"]}\", \"{building["BuildingCity"]}\", \"{building["BuildingState"]}\", \"{building["BuildingPostal"]}\", \"{0.0000}\", \"{0.0000}\", \"{building["BuildingRecordNumber"]}\", {num_rooms})\n")
                 i += 1
     f.close()
     return r
@@ -107,6 +112,8 @@ def filter_bathrooms(rooms):
     exclude = ("mechanical", "electrical", "janitor", "custodial")
 
     bathrooms = []
+    if rooms["ListOfRooms"] is None:
+        return bathrooms
     for r in rooms["ListOfRooms"]["RoomData"]:
         for i in include:
             if re.search(i, r["RoomTypeDescription"].lower()):
