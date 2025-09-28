@@ -99,7 +99,7 @@ Try:
         try {
           const { results } = await env.flushfinder
             .prepare(
-              `SELECT id, room_id, user_id, stars, created_at
+              `SELECT id, room_id, user_id, stars, created_at, review_text
                  FROM reviews
                 WHERE room_id = ?
              ORDER BY datetime(created_at) DESC`

@@ -28,7 +28,7 @@ export default function RoomReviews({ roomId }) {
   return (
     <ul style={{ marginTop: 6 }}>
       {reviews.map(r => (
-        <li key={r.id}>⭐ {r.stars}/5 — {r.user_id}</li>
+        <li key={r.id}>⭐ {r.stars}/5 — {r.review_text}</li>
       ))}
     </ul>
   );
