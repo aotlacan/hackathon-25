@@ -114,6 +114,29 @@ Try:
       }
     }
 
+    // ---- GET /building/:buildingID/reviews ----
+    if (request.method === "GET") {
+      const m = pathname.match(/^\/building\/([^/]+)\/reviews$/);
+      if (m) {
+        const buildingID = m[1];
+        try {
+          const { results } = await env.flushfinder
+            .prepare(
+              `SELECT reviews.id, reviews.room_record_number, reviews.user_id, reviews.stars, reviews.review_text, reviews.created_at, rooms.building_record_number 
+                 FROM reviews JOIN rooms ON reviews.room_record_number=rooms.room_record_number
+                WHERE rooms.building_record_number = ?
+             ORDER BY datetime(created_at) DESC`
+            )
+            .bind(buildingID)
+            .all();
+
+          return json({ building_id: buildingID, reviews: results });
+        } catch (e) {
+          return json({ error: "DB error", detail: String(e) }, 500);
+        }
+      }
+    }
+
     // ---- GET /buildings ----
     if (request.method === "GET" && pathname === "/building") {
       try {

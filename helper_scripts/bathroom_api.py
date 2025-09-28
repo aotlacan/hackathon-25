@@ -26,6 +26,8 @@ BUILDINGINFO_URL = "https://gw.api.it.umich.edu/um/bf/Buildings/v2/BuildingInfo"
 # Pick a BuildingRecordNumber to test, e.g. 004201 = EECS
 BUILDING_RECORD_NUMBER = "1005092"
 
+record_numbers = ["1005224","1005092","1000435","1000403","1005418"]
+
 
 # 1️⃣ Get OAuth2 token
 def get_access_token():
@@ -128,10 +130,16 @@ if __name__ == "__main__":
     token = get_access_token()
     print("✅ Got access token")
 
-    get_building_info(token)
-    rooms = get_room_info(token, BUILDING_RECORD_NUMBER)
-    print(f"🏢 Total rooms in building {BUILDING_RECORD_NUMBER}: {len(rooms)}")
+    #get_building_info(token)
 
-    bathrooms = filter_bathrooms(rooms)
-    print(f"🚻 Bathrooms found: {len(bathrooms)}")
-    print(bathrooms)
+    i = 0
+
+    for brn in record_numbers:
+        rooms = get_room_info(token, brn)
+        #print(f"🏢 Total rooms in building {brn}: {len(rooms)}")
+
+        bathrooms = filter_bathrooms(rooms)
+
+        for bathroom in bathrooms:
+            print(f"(\"{i}\", \"{bathroom["FloorNumber"]}\", \"{bathroom["RoomNumber"]}\",\"{bathroom["RoomRecordNumber"]}\",\"{brn}\"),")
+            i += 1

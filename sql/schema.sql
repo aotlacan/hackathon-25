@@ -4,15 +4,18 @@ CREATE TABLE rooms (
   room_id TEXT PRIMARY KEY,
   floor TEXT,
   room_number TEXT NOT NULL,
+  room_record_number TEXT NOT NULL,
   building_record_number TEXT NOT NULL
 );
 
 CREATE TABLE reviews (
   id TEXT PRIMARY KEY,
-  room_id TEXT NOT NULL,
+  room_record_number TEXT NOT NULL,
   user_id TEXT NOT NULL,
   stars INTEGER NOT NULL CHECK(stars BETWEEN 1 AND 5),
   created_at TEXT NOT NULL,
+  review_text TEXT NOT NULL,
+  room_id TEXT NOT NULL,
   FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
 
