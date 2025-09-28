@@ -1,5 +1,5 @@
 import React from "react";
-import blockM from "./assets/block-m.png";
+import blockM from "/assets/block-m.png";
 
 export default function Header() {
     return (
