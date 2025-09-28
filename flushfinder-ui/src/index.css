@@ -69,6 +69,13 @@ button:focus-visible {
   text-align: center;
 }
 
+#MBathroomHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
 /* Light mode override */
 @media (prefers-color-scheme: light) {
   :root {
