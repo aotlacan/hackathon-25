@@ -181,19 +181,48 @@ Try:
         return json({ error: "Invalid JSON" }, 400);
       }
 
+      const roomId = typeof body?.room_id === "string" ? body.room_id.trim() : "";
+      const reviewText = typeof body?.review_text === "string" ? body.review_text.trim() : "";
+      const usernameRaw = typeof body?.username === "string" ? body.username.trim() : "";
+      const userIdRaw = typeof body?.user_id === "string" ? body.user_id.trim() : "";
       const stars = Number(body?.stars);
-      if (!body?.room_id || !body?.user_id || ![1, 2, 3, 4, 5].includes(stars)) {
+
+      if (!roomId || !reviewText || !usernameRaw || ![1, 2, 3, 4, 5].includes(stars)) {
         return json({ error: "Invalid body" }, 400);
       }
 
       try {
+        const roomRow = await env.flushfinder
+          .prepare(`SELECT room_record_number FROM rooms WHERE room_id = ?`)
+          .bind(roomId)
+          .first();
+
+        if (!roomRow?.room_record_number) {
+          return json({ error: "Unknown room" }, 404);
+        }
+
+        const normalizedUserId = userIdRaw || (() => {
+          const slug = usernameRaw
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 48);
+          return slug ? `user:${slug}` : `user:${crypto.randomUUID()}`;
+        })();
+        const displayName = usernameRaw || normalizedUserId;
+
+        await env.flushfinder
+          .prepare(`INSERT OR IGNORE INTO users (user_id, username) VALUES (?, ?)`)
+          .bind(normalizedUserId, displayName)
+          .run();
+
         const id = crypto.randomUUID();
         await env.flushfinder
           .prepare(
-            `INSERT INTO reviews (id, room_id, user_id, stars, created_at)
-             VALUES (?, ?, ?, ?, datetime('now'))`
+            `INSERT INTO reviews (id, room_record_number, user_id, stars, created_at, review_text, room_id)
+             VALUES (?, ?, ?, ?, datetime('now'), ?, ?)`
           )
-          .bind(id, body.room_id, body.user_id, stars)
+          .bind(id, roomRow.room_record_number, normalizedUserId, stars, reviewText, roomId)
           .run();
 
         return json({ ok: true, id }, 201);
