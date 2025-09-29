@@ -1,0 +1,7 @@
+# Local Cloudflare config
+wrangler.toml
+
+# Node / Python environment caches (optional convenience)
+node_modules
+venv
+
