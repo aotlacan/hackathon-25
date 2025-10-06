@@ -2,6 +2,8 @@
 
 MBathroom helps University of Michigan students find bathrooms that fit their needs. You can browse buildings, read bathroom reviews, and leave ratings so everyone can find a clean, private spot fast.
 
+Find a live version at: https://flushfinder.pages.dev
+
 ## Features
 - Interactive campus map powered by OpenStreetMap.
 - Average bathroom scores and review highlights per building.
